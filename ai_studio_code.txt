@@ -1,0 +1,37 @@
+# Weather simulation
+temperature = np.random.normal(loc=25, scale=5, size=n)  # Celsius
+sunlight = np.clip(np.sin(np.linspace(0, np.pi, n))*1000 + np.random.normal(0,50,n), 0, 1200)  # W/m2
+wind_speed = np.clip(np.random.normal(5, 2, n), 0, 15)  # m/s
+
+# House Mode
+house_battery = np.clip(np.random.uniform(20,100,n), 0, 100)
+house_pv_wh = sunlight * 0.2  # Assume 0.2 kWh per unit sunlight
+house_grid_wh = np.clip(np.random.uniform(0,500,n), 0, None)
+house_cost = house_grid_wh * 0.1  # Example: $0.1 per Wh
+
+# Factory Mode
+factory_battery = np.clip(np.random.uniform(10,100,n), 0, 100)
+factory_pv_wh = sunlight * 0.5  # Factory has larger PV
+factory_grid_wh = np.clip(np.random.uniform(0,1000,n), 0, None)
+factory_cost = factory_grid_wh * 0.08  # Cheaper industrial rate
+
+# Wind Energy
+wind_energy_wh = wind_speed * 50  # Wh approximation
+
+df = pd.DataFrame({
+    'Time': times,
+    'Temperature': temperature,
+    'Sunlight': sunlight,
+    'Wind_Speed': wind_speed,
+    'Wind_Energy_Wh': wind_energy_wh,
+    'House_Battery_%': house_battery,
+    'House_PV_Wh': house_pv_wh,
+    'House_Grid_Wh': house_grid_wh,
+    'House_Cost_$': house_cost,
+    'Factory_Battery_%': factory_battery,
+    'Factory_PV_Wh': factory_pv_wh,
+    'Factory_Grid_Wh': factory_grid_wh,
+    'Factory_Cost_$': factory_cost
+})
+
+return df
